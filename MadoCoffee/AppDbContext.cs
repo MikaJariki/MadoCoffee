@@ -30,7 +30,7 @@ namespace MadoCoffee
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(GetConnectionString());
+                optionsBuilder.UseNpgsql(GetConnectionString());
             }
         }
 

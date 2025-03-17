@@ -28,7 +28,7 @@ namespace MadoCoffee.Models
 
         [MaxLength(255)]
         [Column(TypeName = "nvarchar(255)")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonIgnore]
         public string? ImageUrl { get; set; }

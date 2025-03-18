@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:ConnectedDb"]);
+    options.UseNpgsql(builder.Configuration["ConnectionStrings:ConnectedDb"]);
 });
 
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();

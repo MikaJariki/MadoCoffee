@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MadoCoffee.DTO;
+using MadoCoffee.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MadoCoffee;
-using MadoCoffee.Models;
 
 namespace MadoCoffee.Controllers
 {
@@ -14,95 +10,74 @@ namespace MadoCoffee.Controllers
     [ApiController]
     public class TablesController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public TablesController(AppDbContext context)
+        private readonly TableRepository _t;
+        public TablesController(TableRepository t)
         {
-            _context = context;
+            _t = t;
         }
 
-        // GET: api/Tables
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Table>>> GetTables()
+        [HttpGet("GetAllTables")]
+        public IActionResult Get(string tableLocation = null)
         {
-            return await _context.Tables.ToListAsync();
-        }
-
-        // GET: api/Tables/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Table>> GetTable(long id)
-        {
-            var table = await _context.Tables.FindAsync(id);
-
-            if (table == null)
+            var result = _t.GetAllTables(tableLocation);
+            return Ok(new
             {
-                return NotFound();
-            }
-
-            return table;
+                message = "Lấy dữ liệu thành công",
+                statusCode = StatusCodes.Status200OK,
+                data = result
+            });
         }
 
-        // PUT: api/Tables/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTable(long id, Table table)
+        [HttpGet("GetTableById/{id}")]
+        public IActionResult GetById(long id)
         {
-            if (id != table.ID)
+            var result = _t.GetTablesById(id);
+            return Ok(new
             {
-                return BadRequest();
-            }
-
-            _context.Entry(table).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TableExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+                message = "Lấy dữ liệu thành công",
+                statusCode = StatusCodes.Status200OK,
+                data = result
+            });
         }
 
-        // POST: api/Tables
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Table>> PostTable(Table table)
+        [HttpPost("AddTable")]
+        public IActionResult Add([FromBody] TableDto tableDto)
         {
-            _context.Tables.Add(table);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTable", new { id = table.ID }, table);
-        }
-
-        // DELETE: api/Tables/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTable(long id)
-        {
-            var table = await _context.Tables.FindAsync(id);
-            if (table == null)
+            _t.CreateTables(tableDto);
+            _t.Save();
+            return Ok(new
             {
-                return NotFound();
-            }
-
-            _context.Tables.Remove(table);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                message = "Thêm dữ liệu thành công",
+                statusCode = StatusCodes.Status200OK,
+               
+            });
         }
 
-        private bool TableExists(long id)
+        [HttpPut("UpdateTable/{id}")]
+        public IActionResult Update(long id, [FromBody] TableDto tableDto)
         {
-            return _context.Tables.Any(e => e.ID == id);
+            _t.UpdateTables(id,tableDto);
+            _t.Save();
+
+            return Ok(new
+            {
+                message = "Sửa dữ liệu thành công",
+                statusCode = StatusCodes.Status201Created,
+
+            });
+        }
+
+        [HttpDelete("DeleteTable/{id}")]
+        public IActionResult Delete(long id)
+        {
+            _t.DeleteTables(id);
+            _t.Save();
+            return Ok(new
+            {
+                message = "Xóa dữ liệu thành công",
+                statusCode = StatusCodes.Status200OK,
+
+            });
         }
     }
 }

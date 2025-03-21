@@ -40,5 +40,6 @@ namespace MadoCoffee.Repositories
             _context.Dishes.Remove(dish);
             _context.SaveChanges();
         }
+      
     }
 }

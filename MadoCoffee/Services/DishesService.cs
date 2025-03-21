@@ -27,7 +27,8 @@ namespace MadoCoffee.Services
             }
 
             var dish = new Dish
-            {
+            {   
+                
                 Name = newDishDto.Name,
                 Category = newDishDto.Category,
                 Price = newDishDto.Price,
@@ -48,6 +49,7 @@ namespace MadoCoffee.Services
 
             return new DishDto
             {
+                Id = dish.ID,
                 Name = dish.Name,
                 Category = dish.Category,
                 Price = dish.Price,
@@ -65,6 +67,7 @@ namespace MadoCoffee.Services
             {
                 dishDtos.Add(new DishDto
                 {
+                    Id = dish.ID,
                     Name = dish.Name,
                     Category = dish.Category,
                     Price = dish.Price,

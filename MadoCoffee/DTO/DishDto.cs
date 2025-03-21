@@ -4,7 +4,9 @@ using System.Text.Json.Serialization;
 namespace MadoCoffee.DTO
 {
     public class DishDto
-    {
+     
+    {   
+        public long Id { get; set; }
         [Required]
         [MaxLength(255)]
         public string Name { get; set; }

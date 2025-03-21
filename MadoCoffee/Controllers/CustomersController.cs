@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MadoCoffee.Services;
 using MadoCoffee.DTO;
+using MadoCoffee.Models;
 
 namespace MadoCoffee.Controllers
 {
@@ -20,7 +21,12 @@ namespace MadoCoffee.Controllers
         public IActionResult GetAllCustomers()
         {
             var customers = _customersService.GetAllCustomers();
-            return Ok(customers);
+             return Ok(new
+            {
+                message = "lấy thành công",
+                statusCode = StatusCodes.Status200OK,
+                data = customers,
+            });
         }
 
         // GET: api/GetCustomerById/5
@@ -64,8 +70,10 @@ namespace MadoCoffee.Controllers
                 return BadRequest(new { message = "Invalid customer data!" });
             }
 
-            _customersService.CreateCustomer(newCustomerDto);
-            return Ok(new { message = "Customer created successfully!" });
+             _customersService.CreateCustomer(newCustomerDto);
+            return Ok(new { message = "Customer created successfully!",
+                          StatusCode = StatusCodes.Status201Created,
+            });
         }
 
         // DELETE: api/Customers/5

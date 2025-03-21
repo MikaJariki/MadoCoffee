@@ -23,6 +23,7 @@ namespace MadoCoffee.Controllers
                 return BadRequest(new { message = "Invalid dish data!" });
             }
             _dishesService.CreateDish(newDishDto);
+            
             return Ok(new { message = "Dish created successfully!" });
         }
 
@@ -34,7 +35,11 @@ namespace MadoCoffee.Controllers
             {
                 return NotFound(new { message = "Dish not found!" });
             }
-            return Ok(dish);
+            return Ok(new { 
+              message =  "lấy thành công",
+              statusCode = StatusCodes.Status200OK,
+              data = dish,
+            });
         }
 
         [HttpGet("GetAllDishes")]
